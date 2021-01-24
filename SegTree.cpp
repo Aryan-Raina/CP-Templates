@@ -45,7 +45,7 @@ struct SegTree {
 
     int calc(int l, int r, int x, int lx, int rx) {
         if (lx >= r || rx <= l) return NEUTRAL;
-        if (l <= lx && rx <= r) return single(values[x]);
+        if (l <= lx && rx <= r) return values[x];
         int mid = (lx + rx)/2;
         int s1 = calc(l, r, 2*x + 1, lx, mid);
         int s2 = calc(l, r, 2*x + 2, mid, rx);
