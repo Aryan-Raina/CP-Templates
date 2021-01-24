@@ -25,6 +25,7 @@ struct SegTree {
     }
 
     void build(vector<int> &a) {
+        init(a.size());
         build(a, 0, 0, N);
     }
 
