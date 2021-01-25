@@ -40,8 +40,8 @@ struct SegTree {
         values[x] = merge(values[2*x + 1], values[2*x + 2]);
     }
 
-    void set(int val, int pos) {
-        set(val, pos, 0, 0, N);
+    void set(int i, int v) {
+        set(i, v, 0, 0, N);
     }
 
     int calc(int l, int r, int x, int lx, int rx) {
