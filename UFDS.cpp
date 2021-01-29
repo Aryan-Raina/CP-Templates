@@ -1,20 +1,20 @@
 struct UFDS {
     int n;
-    vector<int> sz, par;
+    vector<int> len, par;
     void init(int x) {
         n = x;
         par.resize(n+2);
-        sz.assign(n+2, 0);
+        len.assign(n+2, 1);
         iota(par.begin(), par.end(), 0);
     }
     int fin(int v) { return par[v] == v ? v : par[v] = fin(par[v]); }
     bool join(int a, int b) {
         a = fin(a); b = fin(b);
         if(a == b) return false;
-        if(sz[a] < sz[b])
+        if(len[a] < len[b])
             swap(a, b);
         par[b] = a;
-        sz[a]+=sz[b];
+        len[a]+=len[b];
         return true;
     }
 };
