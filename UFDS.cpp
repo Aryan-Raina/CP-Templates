@@ -1,6 +1,6 @@
 struct UFDS {
     int n;
-    vector<int> len, par;
+    vector<int> rnk, par;
     void init(int x) {
         n = x;
         par.resize(n+2);
@@ -11,10 +11,10 @@ struct UFDS {
     bool join(int a, int b) {
         a = fin(a); b = fin(b);
         if(a == b) return false;
-        if(len[a] < len[b])
+        if(rnk[a] < rnk[b])
             swap(a, b);
         par[b] = a;
-        len[a] += len[b];
+        if (rnk[a] == rnk[b]) rnk[a]++;
         return true;
     }
 };
