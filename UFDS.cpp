@@ -4,7 +4,7 @@ struct UFDS {
     void init(int x) {
         n = x;
         par.resize(n+2);
-        len.assign(n+2, 1);
+        rnk.assign(n+2, 1);
         iota(par.begin(), par.end(), 0);
     }
     int fin(int v) { return par[v] == v ? v : par[v] = fin(par[v]); }
