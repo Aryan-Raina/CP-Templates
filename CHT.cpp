@@ -1,23 +1,54 @@
+#include <bits/stdc++.h>
+using namespace std;
+ 
+#define int long long
+#define ld long double
+#define ar array
+
+const int INF = 1e15;
+const int MOD = 1e9+7;
+
 struct CHT {
-    deque<pair<int,int>> d;
-    
-    int get(int x) {
-        while (d.size() >= 2) {
-            int a = d[0].first * x + d[0].second;
-            int b = d[1].first * x + d[1].second;
-            if (a <= b) break;
-            d.pop_front();
-        }
-        return d[0].first * x + d[0].second;
-    }
+    struct Line {
+        int m, c;
+        Line(m, c) : m(m), c(c) {}
+        int at(x) { return m*x + c; }
+        int intersect(Line other) { return (other.c - c)/(m - other.m); }
+    };
+
+    deque<Line, int> dq;
 
     void add(int m, int c) {
-        while (d.size() >= 2) {
-            int m1 = end(d)[-1].first, c1 = end(d)[-1].second;
-            int m2 = end(d)[-2].first, c2 = end(d)[-2].second;
-            if ((c-c1)*(m2-m) >= (c-c2)*(m1-m)) break;
-            d.pop_back();
+        Line newLine(m, c);
+        while (!dq.size() > 1 && dq.back().second >= dq.back().first.intersect(newLine)) {
+            dq.pop_back();
         }
-        d.push_back({m, c});
+        if (dq.empty()) {
+            dq.push_back({newLine, 0});
+        } else {
+            dq.push_back({newLine, dq.back.intersect(newLine)});
+        }
+    } 
+
+    int query(int x) {
+        while (dq.size() > 1 && dq[1].second <= x) {
+            dq.pop_front();
+        }
+        return dq[0].first.at(x);
+    }
+
+    int qry(int x) {
+        auto ans = *lower_bound(dq.rbegin(), dq.rend(),
+                                make_pair(Line(0, 0), x),
+                                [&] (const pair<Line, int> &a, const pair<Line, int> &b) {
+                                    return a.second > b.second;
+                                });
+        return ans.first.at(x);
     }
 };
+
+int32_t main() {
+    ios_base::sync_with_stdio(0);
+    cin.tie(0);
+
+}
