@@ -3,36 +3,37 @@ struct CHT {
         int m, c;
         Line(int m, int c) : m(m), c(c) {}
         int at(int x) { return m*x + c; }
-        int intersect(Line other) { return (other.c - c)/(m - other.m); }
+        ld intersect(Line other) { return (ld) (other.c - c)/(m - other.m); }
     };
 
-    deque<pair<Line, int>> dq;
+    deque<Line> dq;
 
     void add(int m, int c) {
         Line newLine(m, c);
-        while (!dq.size() > 1 && dq.back().second >= dq.back().first.intersect(newLine)) {
-            dq.pop_back();
+        while (dq.size() > 1 && dq[1].intersect(newLine) >= dq[1].intersect(dq[0])) {
+            dq.pop_front();
         }
-        if (dq.empty()) {
-            dq.push_back({newLine, 0});
-        } else {
-            dq.push_back({newLine, dq.back().first.intersect(newLine)});
-        }
+        dq.push_front(newLine);
     } 
 
     int query(int x) {
-        while (dq.size() > 1 && dq[1].second <= x) {
-            dq.pop_front();
+        while (dq.size() > 1 && dq.back().intersect(end(dq)[-2]) >= x) {
+            dq.pop_back();
         }
-        return dq[0].first.at(x);
+        return dq.back().at(x);
     }
 
     int qry(int x) {
-        auto ans = *lower_bound(dq.rbegin(), dq.rend(),
-                                make_pair(Line(0, 0), x),
-                                [&] (const pair<Line, int> &a, const pair<Line, int> &b) {
-                                    return a.second > b.second;
-                                });
-        return ans.first.at(x);
+        int lo = 0, hi = dq.size()-1, midL, midR;
+        while (lo < hi) {
+            midL = (lo + hi)>>1;
+            midR = midL+1;
+            if (dq[midL].at(x) > dq[midR].at(x)) {
+                hi = midL;
+            } else {
+                lo = midR;
+            }
+        }
+        return dq[hi].at(x);
     }
 };
