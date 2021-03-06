@@ -1,12 +1,12 @@
 struct CHT {
     struct Line {
         int m, c;
-        Line(m, c) : m(m), c(c) {}
-        int at(x) { return m*x + c; }
+        Line(int m, int c) : m(m), c(c) {}
+        int at(int x) { return m*x + c; }
         int intersect(Line other) { return (other.c - c)/(m - other.m); }
     };
 
-    deque<Line, int> dq;
+    deque<pair<Line, int>> dq;
 
     void add(int m, int c) {
         Line newLine(m, c);
@@ -16,7 +16,7 @@ struct CHT {
         if (dq.empty()) {
             dq.push_back({newLine, 0});
         } else {
-            dq.push_back({newLine, dq.back.intersect(newLine)});
+            dq.push_back({newLine, dq.back().first.intersect(newLine)});
         }
     } 
 
