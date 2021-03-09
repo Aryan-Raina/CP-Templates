@@ -2,25 +2,25 @@ struct CHT {
     struct Line {
         int m, c;
         Line(int m, int c) : m(m), c(c) {}
+        ld intersect(Line other) { return (ld) (c - other.c)/(other.m - m); }
         int at(int x) { return m*x + c; }
-        ld intersect(Line other) { return (ld) (other.c - c)/(m - other.m); }
     };
 
     deque<Line> dq;
 
     void add(int m, int c) {
         Line newLine(m, c);
-        while (dq.size() > 1 && dq[1].intersect(newLine) >= dq[1].intersect(dq[0])) {
-            dq.pop_front();
-        }
-        dq.push_front(newLine);
-    } 
-
-    int query(int x) {
-        while (dq.size() > 1 && dq.back().intersect(end(dq)[-2]) >= x) {
+        while (dq.size() >= 2 && end(dq)[-2].intersect(newLine) <= end(dq)[-2].intersect(end(dq)[-1])) {
             dq.pop_back();
         }
-        return dq.back().at(x);
+        dq.push_back(newLine);
+    }
+
+    int query(int x) {
+        while (dq.size() >= 2 && dq[0].at(x) <= dq[1].at(x)) {
+            dq.pop_front();
+        }
+        return dq[0].at(x);
     }
 
     int qry(int x) {
@@ -28,12 +28,12 @@ struct CHT {
         while (lo < hi) {
             midL = (lo + hi)>>1;
             midR = midL+1;
-            if (dq[midL].at(x) > dq[midR].at(x)) {
-                hi = midL;
-            } else {
+            if (dq[midL].at(x) < dq[midR].at(x)) {
                 lo = midR;
+            } else {
+                hi = midL;
             }
         }
-        return dq[hi].at(x);
+        return dq[lo].at(x);
     }
 };
