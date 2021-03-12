@@ -17,7 +17,7 @@ struct SegTree {
         size = 1;
         while (size < n) size <<= 1;
         values.assign(2*size, 0);
-        operations.assign(2*size, 0);
+        operations.assign(2*size, NO_OPERATION);
     }
 
     void build(vector<int> &a, int x, int lx, int rx) {
