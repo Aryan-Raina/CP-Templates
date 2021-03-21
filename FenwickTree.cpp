@@ -7,7 +7,7 @@ struct FenwickTree {
         f.assign(N+5, 0);
     }
 
-    void set(int i, int v) {
+    void modify(int i, int v) {
         while (i < N) {
             f[i] += v;
             i = i|(i+1);
@@ -23,8 +23,8 @@ struct FenwickTree {
         return res;
     }
 
-    void modify(int l, int r, int v) {
-        set(l, v); set(r+1, -v);
-        if (r < l) set(0, v), set(N, -v);
+    void update(int l, int r, int v) {
+        modify(l, v); modify(r+1, -v);
+        if (r < l) modify(0, v), modify(N, -v);
     }
 };
