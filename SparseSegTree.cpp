@@ -21,7 +21,7 @@ template<class T> struct SparseSegTree {
         return a + b;
     }
 
-    void propogate(int x, int lx, int rx) {
+    void propagate(int x, int lx, int rx) {
         if (rx - lx == 1) return;
         int m = (lx + rx) >> 1;
         if (lc[x] == -1) lc[x] = CNT++;
@@ -35,7 +35,7 @@ template<class T> struct SparseSegTree {
 
     void set(int i, int v, int x, int lx, int rx) {
         if (rx - lx == 1) return void(values[lx] = v);
-        propogate();
+        propagate();
         int m = (lx + rx) >> 1;
         if (i < m) set(i, v, lc[x], lx, m);
         else set(i, v, rc[x], m, rx);
@@ -50,7 +50,7 @@ template<class T> struct SparseSegTree {
             modify_op(values[x], v, rx - lx);
             return;
         }
-        propogate(x, lx, rx);
+        propagate(x, lx, rx);
         int m = (lx + rx) >> 1;
         modify(l, r, v, lc[x], lx, m);
         modify(l, r, v, rc[x], m, rx);
@@ -61,7 +61,7 @@ template<class T> struct SparseSegTree {
     T calc(int l, int r, int x, int lx, int rx) {
         if (lx >= r || l >= rx) return NEUTRAL_ELEMENT;
         if (l <= lx && rx <= r) return values[x];
-        propogate(x, lx, rx);
+        propagate(x, lx, rx);
         int m = (lx + rx) >> 1;
         return calc_op(calc(l, r, lc[x], lx, m), 
             calc(l, r, rc[x], m, rx));
