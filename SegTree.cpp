@@ -1,39 +1,35 @@
-struct SegTree {
+template<class T> struct SegTree {
     int size;
-    vector<int> values;
-    vector<int> operations;
-    const int NO_OPERATION = 0;
-    const int NEUTRAL_ELEMENT = -1;
+    vector<T> values;
+    vector<T> operations;
+    const T NO_OPERATION = 0;
+    const T NEUTRAL_ELEMENT = 0;
     
-    void modify_op(int &a, int b, int len) {
-        a = a | b;
-    }
-
-    int calc_op(int a, int b) {
-        return a & b;
-    }
-
-    void init(int n) {
+    SegTree(int n) {
         size = 1;
         while (size < n) size <<= 1;
         values.assign(2*size, 0);
         operations.assign(2*size, NO_OPERATION);
     }
 
-    void build(vector<int> &a, int x, int lx, int rx) {
+    void modify_op(T &a, T b, int len) {
+        a = a + b*len;
+    }
+
+    T calc_op(T a, T b) {
+        return a + b;
+    }
+
+    void build(vector<T> &a, int x, int lx, int rx) {
         if (rx - lx == 1) return void(values[x] = a[lx]);
         int m = (lx + rx) >> 1;
         build(a, 2*x + 1, lx, m);
         build(a, 2*x + 2, m, rx);
         values[x] = calc_op(values[2*x + 1], values[2*x + 2]);
     }
+    void build(vector<T> &a) { build(a, 0, 0, size); }
 
-    void build(vector<int> &a) {
-        init(a.size());
-        build(a, 0, 0, size);
-    }
-
-    void set(int i, int v, int x, int lx, int rx) {
+    void set(int i, T v, int x, int lx, int rx) {
         if (rx - lx == 1) return void(values[x] = v);
         int m = (lx + rx) >> 1;
         if (i < m) {
@@ -42,10 +38,6 @@ struct SegTree {
             set(i, v, 2*x + 2, m, rx);
         }
         values[x] = calc_op(values[2*x + 1], values[2*x + 2]);
-    }
-
-    void set(int i, int v) {
-        set(i, v, 0, 0, size);
     }
 
     void propogate(int x, int lx, int rx) {
@@ -58,7 +50,7 @@ struct SegTree {
         operations[x] = NO_OPERATION;
     }
  
-    void modify(int l, int r, int v, int x, int lx, int rx) {
+    void modify(int l, int r, T v, int x, int lx, int rx) {
         propogate(x, lx, rx);
         if (lx >= r || l >= rx) return;
         if (l <= lx && rx <= r) {
@@ -71,22 +63,15 @@ struct SegTree {
         modify(l, r, v, 2*x + 2, m, rx);
         values[x] = calc_op(values[2*x + 1], values[2*x + 2]);
     }
+    void modify(int l, int r, T v) { modify(l, r, v, 0, 0, size); }
 
-    void modify(int l, int r, int v) {
-        modify(l, r, v, 0, 0, size);
-    }
-
-    int calc(int l, int r, int x, int lx, int rx) {
+    T calc(int l, int r, int x, int lx, int rx) {
         propogate(x, lx, rx);
         if (lx >= r || l >= rx) return NEUTRAL_ELEMENT;
         if (l <= lx && rx <= r) return values[x];
         int m = (lx + rx) >> 1;
-        int s1 = calc(l, r, 2*x + 1, lx, m);
-        int s2 = calc(l, r, 2*x + 2, m, rx);
-        return calc_op(s1, s2);
+        return calc_op(calc(l, r, 2*x + 1, lx, m), 
+            calc(l, r, 2*x + 2, m, rx));
     }
-
-    int calc(int l, int r) {
-        return calc(l, r, 0, 0, size);
-    }
+    T calc(int l, int r) { return calc(l, r, 0, 0, size); }
 };
