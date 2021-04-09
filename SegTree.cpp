@@ -40,7 +40,7 @@ template<class T> struct SegTree {
         values[x] = calc_op(values[2*x + 1], values[2*x + 2]);
     }
 
-    void propogate(int x, int lx, int rx) {
+    void propagate(int x, int lx, int rx) {
         if (rx - lx == 1) return;
         int m = (lx + rx) >> 1;
         modify_op(operations[2*x + 1], operations[x], 1);
@@ -51,13 +51,13 @@ template<class T> struct SegTree {
     }
  
     void modify(int l, int r, T v, int x, int lx, int rx) {
-        propogate(x, lx, rx);
         if (lx >= r || l >= rx) return;
         if (l <= lx && rx <= r) {
             modify_op(operations[x], v, 1);
             modify_op(values[x], v, rx - lx);
             return;
         }
+        propagate(x, lx, rx);
         int m = (lx + rx) >> 1;
         modify(l, r, v, 2*x + 1, lx, m);
         modify(l, r, v, 2*x + 2, m, rx);
@@ -66,9 +66,9 @@ template<class T> struct SegTree {
     void modify(int l, int r, T v) { modify(l, r, v, 0, 0, size); }
 
     T calc(int l, int r, int x, int lx, int rx) {
-        propogate(x, lx, rx);
         if (lx >= r || l >= rx) return NEUTRAL_ELEMENT;
         if (l <= lx && rx <= r) return values[x];
+        propagate(x, lx, rx);
         int m = (lx + rx) >> 1;
         return calc_op(calc(l, r, 2*x + 1, lx, m), 
             calc(l, r, 2*x + 2, m, rx));
