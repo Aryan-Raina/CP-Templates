@@ -28,7 +28,7 @@ template<class T> struct Node {
         }
     }  
  
-    void propogate() {
+    void propagate() {
         if (rx - lx == 1) return;
         int m = (lx + rx) >> 1;
         if (!lc) lc = new Node(lx, m);
@@ -42,7 +42,7 @@ template<class T> struct Node {
  
     void set(int i, int v) {
         if (rx - lx == 1) return void(value = v);
-        propogate();
+        propagate();
         int m = (lx + rx) >> 1;
         if (i < m) lc->set(i, v);
         else rc->set(i, v);
@@ -56,7 +56,7 @@ template<class T> struct Node {
             modify_op(value, v, rx - lx);
             return;
         }
-        propogate();
+        propagate();
         lc->modify(l, r, v); rc->modify(l, r, v);
         value = calc_op(lc->value, rc->value);
     }
@@ -64,7 +64,7 @@ template<class T> struct Node {
     T calc(int l, int r) {
         if (l >= rx || lx >= r) return NEUTRAL_ELEMENT;
         if (l <= lx && rx <= r) return value;
-        propogate();
+        propagate();
         int x = calc_op(lc->calc(l, r), rc->calc(l, r));
         return x;
     }
