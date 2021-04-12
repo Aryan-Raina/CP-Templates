@@ -21,7 +21,7 @@ template<class T> struct SegTree {
     }
 
     void build(vector<T> &a, int x, int lx, int rx) {
-        if (rx - lx == 1) return void(values[x] = a[lx]);
+        if (rx - lx == 1) return void(values[x] = (lx < a.size()) ? a[lx] : 0);
         int m = (lx + rx) >> 1;
         build(a, 2*x + 1, lx, m);
         build(a, 2*x + 2, m, rx);
