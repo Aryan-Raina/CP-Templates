@@ -1,30 +1,12 @@
 struct FenwickTree {
-    vector<int> f;
-    int N;
-
-    void init(int n) {
-        N = n;
-        f.assign(N+5, 0);
-    }
-
-    void modify(int i, int v) {
-        while (i < N) {
-            f[i] += v;
-            i = i|(i+1);
-        }
-    }
-
-    int calc(int x) {
+    vector<int> s; // s[i] represents sum from [i with last 1 changed to 0, i]
+    FenwickTree(int n) : s(n+5) {}
+    void modify(int pos, int dif) { // a[pos] += dif
+        for (; pos >= 0; pos |= pos+1) s[pos] += dif; // keep changing last 0 to 1
+    } 
+    int calc(int pos) { // sum of values in [0, pos)
         int res = 0;
-        while (x >= 0) {
-            res += f[x];
-            x = x&(x+1); --x;
-        }
+        for (; pos < n; pos &= pos-1) res += s[pos-1]; // keep changing last 1 to 0
         return res;
     }
-
-    void update(int l, int r, int v) {
-        modify(l, v); modify(r+1, -v);
-        if (r < l) modify(0, v), modify(N, -v);
-    }
-};
+}
