@@ -2,8 +2,8 @@ template<class T> struct SegTree {
     int size;
     vector<T> values;
     vector<T> operations;
-    const T NO_OPERATION = 0;
     const T NEUTRAL_ELEMENT = 0;
+    const T NO_OPERATION = 0;
     
     SegTree(int n) {
         size = 1;
