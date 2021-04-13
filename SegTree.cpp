@@ -39,6 +39,7 @@ template<class T> struct SegTree {
         }
         values[x] = calc_op(values[2*x + 1], values[2*x + 2]);
     }
+    void set(int i, T v) { set(i, v, 0, 0, size); }
 
     void propagate(int x, int lx, int rx) {
         if (rx - lx == 1) return;
