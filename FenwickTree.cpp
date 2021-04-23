@@ -1,6 +1,6 @@
-struct FenwickTree {
+struct BIT {
     vector<int> s; // s[i] represents sum from [i with last 1 changed to 0, i]
-    FenwickTree(int _n) : s(_n) {}
+    BIT(int _n) : s(_n) {}
     void modify(int pos, int dif) { // a[pos] += dif
         for (; pos < s.size(); pos |= pos+1) s[pos] += dif; // keep changing last 0 to 1
     } 
