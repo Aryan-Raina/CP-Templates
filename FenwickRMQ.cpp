@@ -1,10 +1,10 @@
-template<class T> struct FenwickTree {
+template<class T> struct BIT {
     int size;
     vector<T> s[2], x; 
     // 0 -> [i-lsb+1, i], 1 -> [i, i+lsb-1], lsb - least significant bit 
     const T NEUTRAL = {1,0};
     
-    FenwickTree(int n) {
+    BIT(int n) {
         size = 1; while (size < n) size <<= 1;
         x = vector<T>(size+1, NEUTRAL);
         s[0] = s[1] = x;
