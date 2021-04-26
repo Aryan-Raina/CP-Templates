@@ -12,8 +12,9 @@ template<class T> struct SegTree {
         operations.assign(2*size, NO_OPERATION);
     }
 
-    void modify_op(T &a, T b, int len) {
-        a = a + b*len;
+    void modify_op(int x, int lx, int rx, int v) {
+        values[x] += v*(rx - lx);
+        operations[x] += v;
     }
 
     T calc_op(T a, T b) {
