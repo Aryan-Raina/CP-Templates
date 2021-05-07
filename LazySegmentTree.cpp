@@ -1,11 +1,11 @@
-template<class T> struct SegTree {
+template<class T> struct SegmentTree {
     int size;
     vector<T> values;
     vector<int> operations;
     const T NEUTRAL_ELEMENT = 0;
     const int NO_OPERATION = 0;
     
-    SegTree(int n) {
+    SegmentTree(int n) {
         size = 1;
         while (size < n) size <<= 1;
         values.assign(2*size, 0);
