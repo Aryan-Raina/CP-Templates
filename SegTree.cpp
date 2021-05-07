@@ -1,9 +1,9 @@
 template<class T> struct SegTree {
     int size;
     vector<T> values;
-    vector<T> operations;
+    vector<int> operations;
     const T NEUTRAL_ELEMENT = 0;
-    const T NO_OPERATION = 0;
+    const int NO_OPERATION = 0;
     
     SegTree(int n) {
         size = 1;
@@ -29,18 +29,6 @@ template<class T> struct SegTree {
         values[x] = calc_op(values[2*x + 1], values[2*x + 2]);
     }
     void build(vector<T> &a) { build(a, 0, 0, size); }
-
-    void set(int i, T v, int x, int lx, int rx) {
-        if (rx - lx == 1) return void(values[x] = v);
-        int m = (lx + rx) >> 1;
-        if (i < m) {
-            set(i, v, 2*x + 1, lx, m);
-        } else {
-            set(i, v, 2*x + 2, m, rx);
-        }
-        values[x] = calc_op(values[2*x + 1], values[2*x + 2]);
-    }
-    void set(int i, T v) { set(i, v, 0, 0, size); }
 
     void propagate(int x, int lx, int rx) {
         if (rx - lx == 1) return;
