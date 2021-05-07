@@ -1,7 +1,7 @@
-template<class T> struct SegTree {
+template<class T> struct SegmentTree {
    int n; vector<T> values; 
    T NEUTRAL_ELEMENT = 0;
-   SegTree(int n) : n(n), values(2*n, NEUTRAL_ELEMENT) {}
+   SegmentTree(int n) : n(n), values(2*n, NEUTRAL_ELEMENT) {}
    T calc_op(T a, T b) { return a + b; }
    void modify(int i, T v) {
       for (values[i += n] = v; i >>= 1; ) 
