@@ -1,4 +1,4 @@
-template<class T, bool VALS_IN_EDGES> struct HeavyLight {
+template<class T> struct HeavyLight {
    int n, timer = 0; vector<vector<int>> adj;
    vector<int> par, root, depth, sz, pos; 
    SegmentTree<T> st;
@@ -36,7 +36,7 @@ template<class T, bool VALS_IN_EDGES> struct HeavyLight {
          op(pos[root[v]], pos[v]);
       }
       if (depth[u] > depth[v]) swap(u, v);
-      op(pos[u] + VALS_IN_EDGES, pos[v]);
+      op(pos[u], pos[v]);
    }
 
    void modifyPath(int u, int v, T val) {
