@@ -1,9 +1,9 @@
 struct KosarajuSCC {
-    int n; vector<vector<int>> adj, radj;
+    int N; vector<vector<int>> adj, radj;
     vector<int> todo, comp, comps;
     vector<bool> vis;
 
-    KosarajuSCC(int n) : n(n), adj(n), radj(n), comp(n, -1), vis(n, 0) {}
+    KosarajuSCC(int n) : N(n), adj(N), radj(N), comp(N, -1), vis(N, 0) {}
 
     void add_edge(int a, int b) { adj[a].push_back(b); radj[b].push_back(a); }
 
@@ -25,4 +25,4 @@ struct KosarajuSCC {
             dfs2(i, i); comps.push_back(i);
         }
     }
-}; 
+};
