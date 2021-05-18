@@ -5,7 +5,7 @@
 int dot(const pt &a, const pt &b) { return (a.X*b.X) + (a.Y*b.Y); }
 int cross(const pt &a, const pt &b) { return (a.X*b.Y) - (b.X*a.Y); }
 pt operator-(const pt &a, const pt &b) { return pt(a.X - b.X, a.Y - b.Y); }
-int norm(const pt &a) { return (a.X*a.X) + (a.Y*a.Y);
+int norm(const pt &a) { return (a.X*a.X) + (a.Y*a.Y); }
 
 vector<int> ConvexHull(vector<pt> &v) {
     int ind = min_element(v.begin(), v.end()) - v.begin();
