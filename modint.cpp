@@ -1,5 +1,4 @@
 //https://codeforces.com/contest/1523/submission/117884052
-
 template<const int &MOD>
 struct _m_int {
     int val;
