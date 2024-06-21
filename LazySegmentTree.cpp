@@ -12,7 +12,7 @@ template<class T> struct SegmentTree {
         operations.assign(2*size, NO_OPERATION);
     }
 
-    void modify_op(int x, int lx, int rx, int v) {
+    void modify_op(int x, int lx, int rx, T v) {
         values[x] += v*(rx - lx);
         operations[x] += v;
     }
@@ -33,20 +33,14 @@ template<class T> struct SegmentTree {
     void propagate(int x, int lx, int rx) {
         if (rx - lx == 1) return;
         int m = (lx + rx) >> 1;
-        modify_op(operations[2*x + 1], operations[x], 1);
-        modify_op(operations[2*x + 2], operations[x], 1);
-        modify_op(values[2*x + 1], operations[x], m - lx);
-        modify_op(values[2*x + 2], operations[x], rx - m);
+        modify_op(2*x + 1, lx, m, operations[x]);
+        modify_op(2*x + 2, m, rx, operations[x]);
         operations[x] = NO_OPERATION;
     }
  
     void modify(int l, int r, T v, int x, int lx, int rx) {
         if (lx >= r || l >= rx) return;
-        if (l <= lx && rx <= r) {
-            modify_op(operations[x], v, 1);
-            modify_op(values[x], v, rx - lx);
-            return;
-        }
+        if (l <= lx && rx <= r) return modify_op(x, lx, rx, v);
         propagate(x, lx, rx);
         int m = (lx + rx) >> 1;
         modify(l, r, v, 2*x + 1, lx, m);
