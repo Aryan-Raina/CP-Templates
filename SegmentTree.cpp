@@ -1,18 +1,58 @@
-template<class T> struct SegmentTree {
-    int n; vector<T> values; 
-    T IDENTITY = 0;
-    SegmentTree(int n, int id) : n(n), values(2*n, IDENTITY = id) {}
-    T calc_op(T a, T b) { return a + b; }
-    void modify(int i, T v) {
-       for (values[i += n] = v; i >>= 1; ) 
-          values[i] = calc_op(values[2*i], values[2*i + 1]);
+
+struct SegTree {
+    typedef T; 
+    T NEUTRAL = 0;
+    int N;
+    vector<T> values;
+ 
+    SegTree(int n) : N(n), values(4*n, NEUTRAL) {}
+ 
+    T merge(T a, T b) {
+        T res = a+b;
+        return res;
     }
+ 
+    void build(vector<int> &a, int x, int lx, int rx) {
+        if (rx - lx == 1) {
+            values[x] = (lx < a.size()) ? a[lx] : NEUTRAL;
+            return;
+        }
+        int mid = (lx + rx)/2;
+        build(a, 2*x + 1, lx, mid);
+        build(a, 2*x + 2, mid, rx);
+        values[x] = merge(values[2*x + 1], values[2*x + 2]);
+    }
+ 
+    void build(vector<int> &a) {
+        build(a, 0, 0, N);
+    }
+ 
+    void set(int i, int v, int x, int lx, int rx) {
+        if (rx - lx == 1) {
+            values[x] = v;
+            return;
+        }
+        int mid = (lx + rx)/2;
+        if (i < mid) {
+            set(i, v, 2*x + 1, lx, mid);
+        } else {
+            set(i, v, 2*x + 2, mid, rx);
+        }
+        values[x] = merge(values[2*x + 1], values[2*x + 2]);
+    }
+ 
+    void set(int pos, int val) {
+        set(pos, val, 0, 0, N);
+    }
+ 
+    T calc(int l, int r, int x, int lx, int rx) {
+        if (lx >= r || rx <= l) return NEUTRAL;
+        if (l <= lx && rx <= r) return values[x];
+        int mid = (lx + rx)/2;
+        return merge(calc(l, r, 2*x + 1, lx, mid), calc(l, r, 2*x + 2, mid, rx));
+    }
+ 
     T calc(int l, int r) {
-       T rans = IDENTITY, lans = IDENTITY;
-       for (l += n, r += n; l < r; l >>= 1, r >>= 1) {
-          if (l & 1) lans = calc_op(lans, values[l++]);
-          if (r & 1) rans = calc_op(values[--r], rans);
-       }
-       return calc_op(lans, rans);
+        return calc(l, r, 0, 0, N);
     }
 };
